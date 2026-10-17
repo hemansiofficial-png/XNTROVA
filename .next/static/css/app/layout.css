@@ -568,31 +568,6 @@ textarea:focus {
   }
 }
 @media (max-width: 760px) {
-  .burger {
-    display: flex;
-  }
-  nav {
-    position: fixed;
-    inset: 68px 0 0;
-    background: var(--navy);
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 2rem;
-    gap: 1.4rem;
-    transform: translateX(100%);
-    visibility: hidden;
-    transition: transform 0.3s, visibility 0.3s;
-  }
-  nav.open {
-    transform: none;
-    visibility: visible;
-  }
-  nav a:not(.btn) {
-    font-size: 1.2rem;
-  }
-  .hdr:has(nav.open) {
-    background: var(--navy);
-  }
   .g2,
   .g3,
   .g4,
@@ -669,3 +644,391 @@ textarea:focus {
 @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media (prefers-reduced-motion:reduce){.marquee{-webkit-mask-image:none;mask-image:none}.track{width:auto;flex-wrap:wrap;justify-content:center}.copy{flex-wrap:wrap;justify-content:center}.copy[aria-hidden]{display:none}}
 @media (max-width:760px){.logo-item{width:150px;height:72px;padding:0 1rem}}
+
+/* Results */
+.results{position:relative;overflow:hidden;background:linear-gradient(180deg,#f4f6fb,#fff)}
+.results::before,.results::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none}
+.results::before{width:340px;height:340px;background:#ffd9cc;top:-120px;left:-100px}.results::after{width:380px;height:380px;background:#cfe0ff;bottom:-140px;right:-120px}
+.results .wrap{position:relative;z-index:1}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);grid-gap:1.25rem;gap:1.25rem;margin-bottom:3rem}
+.rstat{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:20px;padding:1.7rem 1.6rem 1.9rem;box-shadow:var(--shadow);transition:opacity .6s ease,transform .6s ease,box-shadow .25s}
+.rstat.in:hover{transform:translateY(-6px);box-shadow:0 20px 44px rgba(11,27,58,.14)}
+.rstat::after{content:"";position:absolute;right:-50px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#ffe3d9,transparent 70%)}
+.ricon{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#ff6a3d,#e0431b);color:#fff;margin-bottom:1.1rem;position:relative;z-index:1;box-shadow:0 8px 18px rgba(255,106,61,.35)}
+.rnumber{display:block;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1.1;font-weight:800;background:linear-gradient(90deg,#0b1b3a,#1d3d7a);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:var(--navy)}
+.rlabel{display:block;color:var(--muted);font-weight:500;margin-top:.2rem}
+.rbar{position:absolute;left:0;bottom:0;height:5px;width:100%;background:linear-gradient(90deg,#ff6a3d,#ffb347);transform:scaleX(0);transform-origin:left;transition:transform 1.2s cubic-bezier(.2,.8,.2,1) .3s}
+.rstat.in .rbar{transform:none}
+.rcase{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);transition:opacity .6s ease,transform .6s ease,box-shadow .25s}
+.rcase.in:hover{transform:translateY(-8px);box-shadow:0 24px 50px rgba(11,27,58,.16)}
+.rbanner{position:relative;height:160px;overflow:hidden}
+.b0{background:linear-gradient(135deg,#0b1b3a,#1d3d7a)}.b1{background:linear-gradient(135deg,#ff6a3d,#c2360f)}.b2{background:linear-gradient(135deg,#1d3d7a,#3b82f6)}
+.rbanner svg{position:absolute;inset:0;width:100%;height:100%;transition:transform .5s ease}.rcase:hover .rbanner svg{transform:scale(1.05)}
+.rline{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s ease .3s}
+.rarea{fill:rgba(255,255,255,.14);opacity:0;transition:opacity 1s ease 1.1s}.rcase.in .rline{stroke-dashoffset:0}.rcase.in .rarea{opacity:1}
+.rpill{position:absolute;top:1rem;left:1rem;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#fff;font-size:.75rem;font-weight:700;letter-spacing:.04em;padding:.3rem .85rem;border-radius:99px}
+.rnum{position:absolute;right:1rem;top:.4rem;font-size:4.2rem;font-weight:800;line-height:1;color:rgba(255,255,255,.16)}
+.rbody{padding:1.5rem 1.6rem 1.7rem}.rbody p{color:var(--muted)}
+.chips{list-style:none;display:flex;flex-wrap:wrap;gap:.45rem;padding:0;margin:0 0 1.2rem}
+.chips li{background:#fff1ec;color:#b8380f;font-size:.78rem;font-weight:700;padding:.3rem .75rem;border-radius:99px}
+.rlink{color:#b8380f;font-weight:700;text-decoration:none;display:inline-flex;gap:.4rem;align-items:center}.rlink span{transition:transform .25s}.rlink:hover span{transform:translateX(5px)}.rlink:hover{text-decoration:underline}
+@media (max-width:760px){.rstats{grid-template-columns:1fr}}
+
+/* =====================================================================
+   RESPONSIVE LAYER
+   Breakpoints: 1440+ | <=1080 | <=980 | <=900 | <=760 | 561-760 | <=560 | <=400
+   ===================================================================== */
+
+/* ---- Base safeguards (all sizes) ---- */
+html {
+  text-size-adjust: 100%;
+}
+body {
+  overflow-x: clip; /* never allow sideways scroll (clip keeps sticky header working) */
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+li,
+a {
+  overflow-wrap: break-word;
+}
+/* Stop grid/flex children from blowing out their columns */
+.grid > *,
+.hero-in > *,
+.split > *,
+.about-grid > *,
+.fgrid > *,
+.steps > *,
+.stats > *,
+.rstats > * {
+  min-width: 0;
+}
+
+/* Footer copyright was being overridden by the marquee ".copy" rule */
+.ftr .copy {
+  display: block;
+  flex: initial;
+  margin: 2rem 0 0;
+  padding: 1.2rem 0 0;
+  border-top: 1px solid #1c2c52;
+}
+
+/* Floating WhatsApp button respects notches / home bar */
+.wa {
+  right: calc(18px + env(safe-area-inset-right));
+  bottom: calc(18px + env(safe-area-inset-bottom));
+}
+
+/* Hero spacing scales smoothly instead of jumping */
+.hero {
+  padding: clamp(4.5rem, 10vw, 8rem) 0 clamp(3rem, 6vw, 4.5rem);
+}
+
+/* Comfortable touch targets */
+.btn {
+  min-height: 44px;
+  text-align: center;
+}
+.btn-sm {
+  min-height: 40px;
+}
+@media (pointer: coarse) {
+  .dots button {
+    position: relative;
+  }
+  .dots button::after {
+    content: "";
+    position: absolute;
+    inset: -16px -4px;
+  }
+  .top-social a {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Hover-lift effects only on devices that can hover (avoids sticky hover on touch) */
+@media (hover: none) {
+  .btn:hover,
+  .svc:hover,
+  .case:hover,
+  .rstat.in:hover,
+  .rcase.in:hover,
+  .top-social a:hover,
+  .top-cta:hover {
+    transform: none;
+  }
+  .svc:hover .svc-img img,
+  .rcase:hover .rbanner svg {
+    transform: none;
+  }
+}
+
+/* ---- Large screens ---- */
+@media (min-width: 1440px) {
+  :root {
+    --max: 1280px;
+  }
+}
+@media (min-width: 1920px) {
+  :root {
+    --max: 1440px;
+  }
+  html {
+    font-size: 112.5%;
+  }
+}
+
+/* ---- Small laptops / large tablets landscape ---- */
+@media (max-width: 1080px) {
+  nav {
+    gap: 1rem;
+  }
+  nav a:not(.btn) {
+    font-size: 0.9rem;
+  }
+  .hero-in {
+    gap: 2rem;
+  }
+  .about-grid {
+    gap: 2.5rem;
+  }
+}
+
+/* ---- Tablets ---- */
+@media (max-width: 980px) {
+  .topbar-in {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-block: 0.4rem;
+  }
+  .top-contact {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1.2rem;
+  }
+  .lead {
+    max-width: none;
+  }
+  .head {
+    margin-bottom: 2rem;
+  }
+}
+
+/* ---- Mobile navigation (dropdown panel under the sticky header) ---- */
+@media (max-width: 900px) {
+  .burger {
+    display: flex;
+  }
+  nav {
+    position: absolute;
+    inset: 100% 0 auto; /* sits right below the header, whatever is above it */
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0.75rem max(1.25rem, env(safe-area-inset-left)) 1.5rem;
+    background: var(--navy);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 30px rgba(0, 0, 0, 0.3);
+    max-height: calc(100vh - 68px);
+    max-height: calc(100dvh - 68px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+  }
+  nav.open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+  nav a:not(.btn) {
+    font-size: 1.1rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  nav a:not(.btn)::after {
+    display: none;
+  }
+  nav .btn {
+    margin-top: 1rem;
+    width: 100%;
+  }
+  .hdr:has(nav.open) {
+    background: var(--navy);
+  }
+}
+
+/* ---- Large phones / small tablets portrait ---- */
+@media (min-width: 561px) and (max-width: 760px) {
+  .g2,
+  .g3,
+  .g4,
+  .steps,
+  .fgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ---- Phones ---- */
+@media (max-width: 760px) {
+  /* 16px inputs stop iOS Safari zooming in on focus */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+  .sec {
+    padding: clamp(2.75rem, 9vw, 3.5rem) 0;
+  }
+  .split,
+  .about-grid {
+    gap: 2rem;
+  }
+  .proof {
+    gap: 1rem 1.5rem;
+  }
+  .benefit .num {
+    font-size: 1.9rem;
+  }
+  .rbanner {
+    height: 140px;
+  }
+  .ftr {
+    padding-bottom: 5rem; /* room for the floating WhatsApp button */
+  }
+  .ftr a,
+  .contact a {
+    display: inline-block;
+    padding-block: 0.15rem;
+  }
+}
+
+/* ---- Small phones ---- */
+@media (max-width: 560px) {
+  .wrap {
+    width: min(100% - 2rem, var(--max));
+  }
+  .topbar {
+    font-size: 0.85rem;
+  }
+  .top-social {
+    display: none;
+  }
+  .top-contact {
+    gap: 0.4rem 1rem;
+  }
+  .top-cta {
+    padding: 0.5rem 0.9rem;
+  }
+
+  /* Buttons stack and fill the row */
+  .row {
+    flex-direction: column;
+  }
+  .row .btn {
+    width: 100%;
+  }
+
+  .card {
+    padding: 1.25rem;
+  }
+  .svc-img {
+    margin: -1.25rem -1.25rem 1rem; /* keep in step with .card padding */
+  }
+  .rbody {
+    padding: 1.25rem;
+  }
+  .faq-list details {
+    padding: 0 1rem;
+    border-radius: 12px;
+  }
+  .faq-list summary {
+    padding: 1rem 0;
+  }
+
+  /* About visual: keep floating chips inside the viewport */
+  .about-visual {
+    padding: 1rem 0.5rem 1.6rem 0;
+  }
+  .panel {
+    padding: 1rem;
+    border-radius: 18px;
+  }
+  .bars {
+    height: 100px;
+    gap: 0.5rem;
+  }
+  .chip {
+    padding: 0.5rem 0.8rem;
+    border-radius: 12px;
+  }
+  .chip strong {
+    font-size: 1.15rem;
+  }
+  .chip-a {
+    right: 0;
+  }
+  .chip-b {
+    left: 0;
+  }
+
+  .rstat {
+    padding: 1.3rem 1.2rem 1.5rem;
+  }
+  .rnum {
+    font-size: 3.2rem;
+  }
+  .logo-item {
+    width: 130px;
+    height: 64px;
+    padding: 0 0.8rem;
+  }
+  .wa {
+    padding: 0.65rem 0.95rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ---- Very small phones (<=400px, e.g. iPhone SE, Galaxy Fold) ---- */
+@media (max-width: 400px) {
+  .logo {
+    height: 32px;
+  }
+  .btn {
+    padding-inline: 1.2rem;
+  }
+  .proof strong {
+    font-size: 1.2rem;
+  }
+  .top-link {
+    font-size: 0.82rem;
+  }
+}
+
+/* ---- Landscape phones (short viewports) ---- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  .sec {
+    padding: 2.5rem 0;
+  }
+}
