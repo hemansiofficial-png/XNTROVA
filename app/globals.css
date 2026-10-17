@@ -640,3 +640,19 @@ textarea:focus {
 .faq-list summary::after{content:"+";font-size:1.5rem;line-height:1;color:var(--accent);transition:transform .25s}
 .faq-list details[open] summary::after{transform:rotate(45deg)}
 .faq-list p{margin:0 0 1.2rem;color:var(--muted)}
+
+
+/* Trusted by - logo marquees */
+.trust .head{margin-bottom:2rem}
+.marquees{display:grid;gap:1.2rem}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.track{display:flex;width:max-content;animation:marquee var(--dur,45s) linear infinite;will-change:transform}
+.marquee.right .track{animation-direction:reverse}
+.marquee:hover .track{animation-play-state:paused}
+.copy{display:flex;flex:none;list-style:none;margin:0;padding:0}
+.logo-item{flex:none;display:grid;place-items:center;width:190px;height:84px;padding:0 1.4rem}
+.logo-item img{max-width:100%;max-height:56px;width:auto;height:auto;object-fit:contain;transition:transform .3s}
+.logo-item:hover img{transform:scale(1.1)}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee{-webkit-mask-image:none;mask-image:none}.track{width:auto;flex-wrap:wrap;justify-content:center}.copy{flex-wrap:wrap;justify-content:center}.copy[aria-hidden]{display:none}}
+@media (max-width:760px){.logo-item{width:150px;height:72px;padding:0 1rem}}

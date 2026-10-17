@@ -10,6 +10,7 @@ import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import TrustedBy from "@/components/TrustedBy";
 import FAQ  from "@/components/FAQ";
 import { SITE } from "@/data/content";
 
@@ -20,7 +21,7 @@ export default function Home() {
   return (<>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <TopBar /><Header /><main>
-      <Hero /><Services /><About /><WhyUs /><Process /><Results /><Testimonials /><FAQ /><CTA /><Contact />
+      <Hero /><Services /><TrustedBy /><About /><WhyUs /><Process /><Results /><Testimonials /><FAQ /><CTA /><Contact />
     </main><Footer />
     <a className="wa" href={SITE.whatsapp} aria-label="Chat with Xntrova on WhatsApp" target="_blank" rel="noopener noreferrer">WhatsApp</a>
   </>);
